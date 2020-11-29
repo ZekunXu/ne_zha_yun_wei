@@ -9,6 +9,7 @@ import '../../routers/application.dart';
 import '../../services/get_navigation_info.dart';
 import '../../services/navigation_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'get_voice_command.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 RobotList(),
+                GetVoiceCommand(),
                 Test(),
               ],
             ),
@@ -110,11 +112,6 @@ class _TestState extends State<Test> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        RaisedButton(
-        child: Text("new login page"),
-        onPressed: (){
-          Application.router.navigateTo(context, "/newLogin");
-        }),
         DropdownButtonHideUnderline(
           child: DropdownButton(
             value: this.myMap,
