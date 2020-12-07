@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'configure_url.dart';
 
 class MyCookie {
+  /// 使用 PersisCookieJar 方便存储
   static PersistCookieJar _cookieJar;
 
   static Future<PersistCookieJar> get cookieJar async {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MyButtonWithIcon extends StatefulWidget {
 
-  final Icon icon;
+  final IconData icon;
   final String text;
   final Function onPressed;
 
@@ -14,26 +14,15 @@ class MyButtonWithIcon extends StatefulWidget {
 class _MyButtonWithIconState extends State<MyButtonWithIcon> {
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6.0)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            widget.icon ?? Icons.check,
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          ),
-          Text(
-            widget.text,
-            style: TextStyle(
-                fontSize: 16),
-          ),
-        ],
+    return Container(
+      width: 100,
+      child: FlatButton.icon(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.0)),
+        label: Text(widget.text),
+        icon: Icon(widget.icon ?? Icons.check),
+        onPressed: widget.onPressed,
       ),
-      onPressed: widget.onPressed,
     );
   }
   

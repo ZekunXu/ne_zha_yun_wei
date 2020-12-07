@@ -14,11 +14,6 @@ class _MessagePageState extends State<MessagePage> {
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-          child: Center(
-            child: MyTextField(
-              hintText: "hahah",
-            ),
-          ),
         ),
       ),
     );

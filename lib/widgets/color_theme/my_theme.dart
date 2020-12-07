@@ -5,9 +5,6 @@ ThemeData myDarkTheme = ThemeData(
   primarySwatch: MyColor.blue,
   scaffoldBackgroundColor: Color.fromRGBO(47, 49, 53, 1.000),
   brightness: Brightness.dark,
-  buttonTheme: ButtonThemeData(
-    textTheme: ButtonTextTheme.primary,
-  ),
   cardTheme: CardTheme(
     color: Color.fromRGBO(53, 56, 60, 1.000),
     shape: RoundedRectangleBorder(

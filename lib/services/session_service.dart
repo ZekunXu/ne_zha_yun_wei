@@ -13,12 +13,29 @@ Future<Response> handleLogin(Map loginInfo) async {
   return response;
 }
 
+Future<bool> handleLogout() async {
+
+  await deleteSessionCookie();
+  bool isSuccess = await getSessionCookie().then((value){
+    if(value.length > 0){
+      return false;
+    }else{
+      return true;
+    }
+  });
+
+  return isSuccess;
+}
 
 Future<List> getSessionCookie() async {
 
   var cookie = (await MyCookie.cookieJar).loadForRequest(Uri.parse(daluApiUrl));
 
   return cookie;
+}
+
+deleteSessionCookie() async {
+  (await MyCookie.cookieJar).delete(Uri.parse(daluApiUrl));
 }
 
 

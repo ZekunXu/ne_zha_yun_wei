@@ -1,11 +1,18 @@
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:dalu_robot/redux/actions/session_action.dart';
+import 'package:dalu_robot/routers/application.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:async';
 import 'package:roslib/roslib.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import 'robot_control.dart';
+import '../../widgets/common_button_with_icon.dart';
+import '../../services/session_service.dart';
+import '../../main_state.dart';
+import 'package:redux/redux.dart';
 
 class MePage extends StatefulWidget {
   _MePageState createState() => _MePageState();
@@ -45,17 +52,21 @@ class _MePageState extends State<MePage> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    if (_timer != null) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: _logoutWidget(),
         body: StreamBuilder<Object>(
           stream: ros.statusStream,
           builder: (context, snapshot) {
-            return SafeArea(child: SingleChildScrollView(
+            return SafeArea(
+                child: SingleChildScrollView(
               child: Column(
                 children: [
                   Center(
@@ -104,37 +115,38 @@ class _MePageState extends State<MePage> {
 
                         var _this = this;
 
-                        _timer =
-                            Timer.periodic(Duration(milliseconds: 500), (timer) {
-                              topic.subscribe();
-                              ros.stream.listen((event) {
-                                if (event["topic"] ==
-                                    '/zed/rgb/image_raw_color/compressed') {
-                                  Uint8List image = Base64Decoder().convert(event["msg"]["data"]);
-                                  setState(() {
-                                    _this.image = image;
-                                    _this.isImage = true;
-                                  });
-                                  topic.unsubscribe();
-                                }
+                        _timer = Timer.periodic(Duration(milliseconds: 500),
+                            (timer) {
+                          topic.subscribe();
+                          ros.stream.listen((event) {
+                            if (event["topic"] ==
+                                '/zed/rgb/image_raw_color/compressed') {
+                              Uint8List image =
+                                  Base64Decoder().convert(event["msg"]["data"]);
+                              setState(() {
+                                _this.image = image;
+                                _this.isImage = true;
                               });
-                            });
+                              topic.unsubscribe();
+                            }
+                          });
+                        });
                       }),
                   Image(
                     image: this.isImage
                         ? MemoryImage(this.image)
                         : NetworkImage(
-                        "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3122841051,1709320166&fm=26&gp=0.jpg"),
+                            "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3122841051,1709320166&fm=26&gp=0.jpg"),
                     fit: BoxFit.cover,
                     width: 300,
                     height: 200,
                     gaplessPlayback: true,
                   ),
                   RobotControlWidget(
-                    onRobotControlListener: (rad, len){
+                    onRobotControlListener: (rad, len) {
                       // print("角度: ${-rad*180/pi+180}, 位移: $len");
                       _gogogo(len, rad, this.cmdVel);
-                    } ,
+                    },
                   ),
                 ],
               ),
@@ -142,27 +154,76 @@ class _MePageState extends State<MePage> {
           },
         ));
   }
+
+  _logoutWidget(){
+    return SizedBox(
+      height: 49,
+      child: StoreConnector<MainState, _viewModel>(
+        converter: (store) => _viewModel.create(store),
+        builder: (context, viewModel){
+          return MyButtonWithIcon(
+            text: "登出",
+            icon: Icons.logout,
+            onPressed: () {
+              handleLogout().then((value) {
+                if (value) {
+                  viewModel.onSetLoginState(false);
+                  Fluttertoast.showToast(
+                      msg: "退出成功",
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white);
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "退出失败",
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white);
+                }
+              });
+            },
+          );
+        },
+      ),
+    );
+  }
 }
 
-_gogogo (axisX, axisY, cmdVel) async {
+class _viewModel {
+  Function(bool) onSetLoginState;
 
+  _viewModel({this.onSetLoginState});
+
+  factory _viewModel.create(Store<MainState> store){
+    _onSetLoginState(bool isLogin){
+      store.dispatch(setLoginStateAction(isLogin: isLogin));
+    }
+
+    return _viewModel(
+      onSetLoginState: _onSetLoginState,
+    );
+
+  }
+}
+
+_gogogo(axisX, axisY, cmdVel) async {
   var axisYY;
   var axisXX;
 
-  if ((-axisY*180/pi+180) < 90 || (-axisY*180/pi+180) > 270){
+  if ((-axisY * 180 / pi + 180) < 90 || (-axisY * 180 / pi + 180) > 270) {
     axisXX = axisX;
-  }else if((-axisY*180/pi+180) == 90 || (-axisY*180/pi+180) == -270){
+  } else if ((-axisY * 180 / pi + 180) == 90 ||
+      (-axisY * 180 / pi + 180) == -270) {
     axisXX = 0;
-  }else {
+  } else {
     axisXX = -axisX;
   }
 
-  if((-axisY*180/pi+180) >= 0 && (-axisY*180/pi+180) <= 90){
-    axisYY = -(-axisY*180/pi+180)/180;
-  }else if((-axisY*180/pi+180)>90 && (-axisY*180/pi+180) <=270){
-    axisYY = -(-axisY*180/pi)/180;
-  }else{
-    axisYY = (axisY*180/pi+180)/180;
+  if ((-axisY * 180 / pi + 180) >= 0 && (-axisY * 180 / pi + 180) <= 90) {
+    axisYY = -(-axisY * 180 / pi + 180) / 180;
+  } else if ((-axisY * 180 / pi + 180) > 90 &&
+      (-axisY * 180 / pi + 180) <= 270) {
+    axisYY = -(-axisY * 180 / pi) / 180;
+  } else {
+    axisYY = (axisY * 180 / pi + 180) / 180;
   }
 
   // print("角度: ${(-axisY*180/pi+180)}, 线: $axisXX");
@@ -170,7 +231,7 @@ _gogogo (axisX, axisY, cmdVel) async {
 
   Map message = {
     "linear": {
-      "x": axisXX/10,
+      "x": axisXX / 10,
       "y": 0.0,
       "z": 0.0,
     },
