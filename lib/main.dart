@@ -1,4 +1,5 @@
 import 'package:dalu_robot/configs/configure_routes.dart';
+import 'package:dalu_robot/widgets/color_theme/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import './pages/index.dart';
@@ -8,6 +9,7 @@ import 'package:fluro/fluro.dart';
 import './routers/routes.dart';
 import './routers/application.dart';
 import './services/session_service.dart';
+import 'widgets/color_theme/my_color.dart';
 
 void main() {
   runApp(MyApp());
@@ -57,7 +59,8 @@ class _MyAppState extends State<MyApp> {
         builder: (context, store) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: store.state.themeState.themeData,
+            theme: ThemeData.light(),
+            darkTheme: myDarkTheme,
             home: IndexPage(),
             onGenerateRoute: Application.router.generator,
           );

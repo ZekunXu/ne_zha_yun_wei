@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import './home/home.dart';
 import '../main_state.dart';
 import './me/me.dart';
+import './messages/message.dart';
 
 class IndexPage extends StatefulWidget {
   _IndexPageState createState() => _IndexPageState();
@@ -11,12 +12,14 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   final List<BottomNavigationBarItem> bottomNavigationBarItemList = [
-    BottomNavigationBarItem(icon: Icon(Icons.android), title: Text("首页")),
-    BottomNavigationBarItem(icon: Icon(Icons.person), title: Text("我的")),
+    BottomNavigationBarItem(icon: Icon(Icons.android), label: "首页"),
+    BottomNavigationBarItem(icon: Icon(Icons.message), label: "消息"),
+    BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的"),
   ];
 
   final List<Widget> tabBodies = [
     HomePage(),
+    MessagePage(),
     MePage(),
   ];
 
@@ -29,12 +32,6 @@ class _IndexPageState extends State<IndexPage> {
         return store.state.sessionState.isLogin
             ? Scaffold(
           bottomNavigationBar: BottomNavigationBar(
-            unselectedIconTheme: IconThemeData(
-              color: Color.fromARGB(117, 117, 117, 1)
-            ),
-            selectedIconTheme: IconThemeData(
-              color: Color.fromARGB(63, 81, 181, 1)
-            ),
             items: this.bottomNavigationBarItemList,
             currentIndex: this.currentPageIndex,
             onTap: (int index){

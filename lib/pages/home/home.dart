@@ -10,6 +10,7 @@ import '../../services/get_navigation_info.dart';
 import '../../services/navigation_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'get_voice_command.dart';
+import '../../widgets/common_card.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -27,19 +28,19 @@ class _HomePageState extends State<HomePage> {
       converter: (store) => _viewModel.create(store),
       builder: (context, viewModel) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text("My Robot"),
+          body: SafeArea(
+            child: SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                  child: Column(
+                    children: [
+                      RobotList(),
+                      GetVoiceCommand(),
+                      Test(),
+                    ],
+                  ),
+                )),
           ),
-          body: SingleChildScrollView(
-              child: Container(
-            child: Column(
-              children: [
-                RobotList(),
-                GetVoiceCommand(),
-                Test(),
-              ],
-            ),
-          )),
         );
       },
     );
@@ -71,27 +72,23 @@ class _RobotListState extends State<RobotList> {
   @override
   Widget build(BuildContext context) {
     return this.robotList.length > 0
-        ? Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
+        ? MyCard(
             child: Container(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Column(
-                children: this.robotList.map((e) {
-                  return ListTile(
-                    leading: Icon(Icons.android),
-                    title: Text(e["Nickname"].toString()),
-                    subtitle: Text(e["Online"] ? "在线" : "离线"),
-                    onTap: () {
-                      Application.router.navigateTo(context,
-                          "/robot?nickname=${Uri.encodeQueryComponent(e["Nickname"].toString())}&robotSn=${e["Robotsn"].toString()}");
-                    },
-                  );
-                }).toList(),
-              ),
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Column(
+              children: this.robotList.map((e) {
+                return ListTile(
+                  leading: Icon(Icons.android),
+                  title: Text(e["Nickname"].toString()),
+                  subtitle: Text(e["Online"] ? "在线" : "离线"),
+                  onTap: () {
+                    Application.router.navigateTo(context,
+                        "/robot?nickname=${Uri.encodeQueryComponent(e["Nickname"].toString())}&robotSn=${e["Robotsn"].toString()}");
+                  },
+                );
+              }).toList(),
             ),
-          )
+          ))
         : Text("loading...");
   }
 }

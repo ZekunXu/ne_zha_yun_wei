@@ -16,6 +16,5 @@ class MyRoutes {
 
     router.define(Routes.loginPage, handler: loginPageHandler);
     router.define(Routes.robotMainPage, handler: robotMainPageHandler);
-    router.define(Routes.newLoginPage, handler: newLoginPageHandler);
   }
 }

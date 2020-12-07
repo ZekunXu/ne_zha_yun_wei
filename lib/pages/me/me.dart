@@ -6,7 +6,6 @@ import 'package:roslib/roslib.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import 'robot_control.dart';
-import 'dart:math';
 
 class MePage extends StatefulWidget {
   _MePageState createState() => _MePageState();
@@ -53,13 +52,10 @@ class _MePageState extends State<MePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("测试页面"),
-        ),
         body: StreamBuilder<Object>(
           stream: ros.statusStream,
           builder: (context, snapshot) {
-            return SingleChildScrollView(
+            return SafeArea(child: SingleChildScrollView(
               child: Column(
                 children: [
                   Center(
@@ -142,7 +138,7 @@ class _MePageState extends State<MePage> {
                   ),
                 ],
               ),
-            );
+            ));
           },
         ));
   }
