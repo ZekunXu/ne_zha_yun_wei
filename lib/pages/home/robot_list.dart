@@ -28,6 +28,18 @@ class _RobotListState extends State<RobotList> {
 
   @override
   Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: this.robotList.length,
+        itemBuilder: (context, index) {
+        return MyCard(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+            child: null
+        );
+        }
+    );
+  }
+
+  _oldList() {
     return this.robotList.length > 0
         ? MyCard(
         child: Container(
@@ -49,3 +61,4 @@ class _RobotListState extends State<RobotList> {
         : Text("loading...");
   }
 }
+
