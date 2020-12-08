@@ -25,25 +25,16 @@ class _HomePageState extends State<HomePage> {
       builder: (context, viewModel) {
         return Scaffold(
           body: SafeArea(
-            child: SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                  child: Column(
-                    children: [
-                      RobotList(),
-                      GetVoiceCommand(),
-                      Test(),
-                    ],
-                  ),
-                )),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+              child: RobotList(),
+            ),
           ),
         );
       },
     );
   }
 }
-
-
 
 class Test extends StatefulWidget {
   _TestState createState() => _TestState();

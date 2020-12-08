@@ -10,8 +10,6 @@ ThemeData myDarkTheme = ThemeData(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(20.0)),
     ),
-    elevation: 3.0,
-    shadowColor: Color.fromRGBO(0, 0, 0, 1.000),
   ),
   textTheme: TextTheme(
     bodyText1: TextStyle(

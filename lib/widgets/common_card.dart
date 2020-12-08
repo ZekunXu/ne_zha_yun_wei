@@ -13,9 +13,9 @@ class MyCard extends StatefulWidget {
 
   final Widget child;
   final EdgeInsets margin;
-  final EdgeInsets padding;
+  final BoxBorder border;
 
-  MyCard({Key key, @required this.child, this.margin, this.padding}) : super(key: key);
+  MyCard({Key key, @required this.child, this.margin, this.border}) : super(key: key);
   _MyCardState createState ()=> _MyCardState();
 }
 
@@ -23,14 +23,14 @@ class _MyCardState extends State<MyCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: widget.padding ?? EdgeInsets.zero,
       width: double.maxFinite,
       decoration: BoxDecoration(
+        border: widget.border ?? null,
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
         boxShadow: [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.16),
-            offset: Offset(0.0, 3.0),
+            offset: Offset(0.0, 0.3),
             blurRadius: 5.0,
           ),
         ],
