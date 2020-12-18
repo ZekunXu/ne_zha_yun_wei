@@ -30,6 +30,8 @@ class _RobotListState extends State<RobotList> {
   @override
   Widget build(BuildContext context) {
     return this.robotList.length > 0 ? ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         itemCount: this.robotList.length,
         itemBuilder: (context, index) {
 

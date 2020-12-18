@@ -1,3 +1,4 @@
+import 'package:dalu_robot/pages/home/robot_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -6,7 +7,6 @@ import '../../services/get_navigation_info.dart';
 import '../../services/navigation_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'get_voice_command.dart';
-import 'robot_list.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -25,9 +25,13 @@ class _HomePageState extends State<HomePage> {
       builder: (context, viewModel) {
         return Scaffold(
           body: SafeArea(
-            child: Container(
-              padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-              child: RobotList(),
+            child: ListView(
+              padding: EdgeInsets.fromLTRB(15, 30, 15, 30),
+              children: [
+                RobotList(),
+                Padding(padding: EdgeInsets.only(bottom: 10),),
+                Test(),
+              ],
             ),
           ),
         );
